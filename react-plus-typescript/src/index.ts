@@ -1,5 +1,9 @@
-const log = (str: string) => {
+export const log = (str: string) => {
     console.log(str)
 }
 
-log('Hello, Typescript!')
+class A {
+    greeting = "Hi"
+}
+
+log("str")
