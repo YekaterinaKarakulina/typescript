@@ -1,11 +1,21 @@
-import React from 'react'
+import React from "react";
 
-import Pizza from './Pizza'
+import Pizza from "./Pizza";
 
-import pizzas from '../data/pizzas.json'
+import pizzas from "../data/pizzas.json";
+
+import AppCSS from "./App.module.css";
 
 const App = () => {
-    return <ul>{pizzas.map(pizza => <Pizza key={pizza.id} pizza={pizza} />)}</ul>
-}
+  return (
+    <div className={AppCSS.container}>
+      <ul>
+        {pizzas.map((pizza) => (
+          <Pizza key={pizza.id} pizza={pizza} />
+        ))}
+      </ul>
+    </div>
+  );
+};
 
-export default App
+export default App;
