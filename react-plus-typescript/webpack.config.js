@@ -2,10 +2,10 @@ const HtmlWebpackPlugin = require("html-webpack-plugin");
 const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 
 module.exports = {
-  entry: './src/index.tsx',
+  entry: "./src/index.tsx",
   devtool: "eval-source-map",
   resolve: {
-    extensions: ['.js', '.ts', '.tsx'],
+    extensions: [".js", ".ts", ".tsx"],
   },
   module: {
     rules: [
@@ -16,7 +16,24 @@ module.exports = {
       },
       {
         test: /\.css$/,
-        use: [MiniCssExtractPlugin.loader, { loader: "css-loader" , options: { modules: true } } ],
+        use: [
+          MiniCssExtractPlugin.loader,
+          { loader: "css-loader", options: { modules: true } },
+        ],
+      },
+      {
+        test: /\.svg$/,
+        loader: "@svgr/webpack",
+        options: {
+          svgoConfig: {
+            plugins: [
+              {
+                name: "removeViewBox",
+                active: false,
+              },
+            ],
+          },
+        },
       },
     ],
   },
