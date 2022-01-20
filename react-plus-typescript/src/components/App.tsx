@@ -1,6 +1,7 @@
 import React from "react";
 
 import Pizza from "./Pizza";
+import Cart from './Cart'
 
 import PizzaSVG from "../svg/pizza.svg";
 
@@ -14,6 +15,7 @@ const App = () => {
       <div className={AppCSS.header}>
         <PizzaSVG width={120} height={120} />
         <div className={AppCSS.siteTitle}>Delicious Pizza</div>
+        <Cart />
       </div>
       <ul>
         {pizzas.map((pizza) => (
