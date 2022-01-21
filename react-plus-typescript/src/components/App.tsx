@@ -1,7 +1,9 @@
 import React from "react";
 
 import Pizza from "./Pizza";
-import Cart from './Cart'
+import Cart from "./Cart";
+
+import AppStateProvider from "./AppState";
 
 import PizzaSVG from "../svg/pizza.svg";
 
@@ -11,18 +13,20 @@ import AppCSS from "./App.module.css";
 
 const App = () => {
   return (
-    <div className={AppCSS.container}>
-      <div className={AppCSS.header}>
-        <PizzaSVG width={120} height={120} />
-        <div className={AppCSS.siteTitle}>Delicious Pizza</div>
-        <Cart />
+    <AppStateProvider>
+      <div className={AppCSS.container}>
+        <div className={AppCSS.header}>
+          <PizzaSVG width={120} height={120} />
+          <div className={AppCSS.siteTitle}>Delicious Pizza</div>
+          <Cart />
+        </div>
+        <ul>
+          {pizzas.map((pizza) => (
+            <Pizza key={pizza.id} pizza={pizza} />
+          ))}
+        </ul>
       </div>
-      <ul>
-        {pizzas.map((pizza) => (
-          <Pizza key={pizza.id} pizza={pizza} />
-        ))}
-      </ul>
-    </div>
+    </AppStateProvider>
   );
 };
 
