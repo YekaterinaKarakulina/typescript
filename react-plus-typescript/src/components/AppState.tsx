@@ -1,13 +1,15 @@
-import React, { createContext, useState, useContext } from "react";
+import React, { createContext, useContext, useReducer } from "react";
+
+interface CartItem {
+  id: number;
+  name: string;
+  price: number;
+  quantity: number;
+}
 
 interface AppStateValue {
   cart: {
-    items: {
-      id: number;
-      name: string;
-      price: number;
-      quantity: number
-    }[];
+    items: CartItem[];
   };
 }
 
@@ -19,28 +21,67 @@ const defaultState: AppStateValue = {
 
 export const AppStateContext = createContext(defaultState);
 
-export const AppSetStateContext = createContext<
-  React.Dispatch<React.SetStateAction<AppStateValue>> | undefined
+export const AppDispatchContext = createContext<
+  React.Dispatch<AddToCartAction> | undefined
 >(undefined);
 
-export const useSetState = () => {
-  const setState = useContext(AppSetStateContext);
+interface Action<T> {
+  type: T;
+}
 
-  if(!setState) {
-      throw new Error('useSetState was called iutside of the AppSetStateContext provider')
+interface AddToCartAction extends Action<"ADD_TO_CART"> {
+  payload: {
+    item: Omit<CartItem, 'quantity'>
+  };
+}
+
+const reducer = (state: AppStateValue, action: AddToCartAction) => {
+  if (action.type === "ADD_TO_CART") {
+    const itemToAdd = action.payload.item;
+
+    const itemExist = state.cart.items.find((item) => item.id === itemToAdd.id);
+
+    return {
+      ...state,
+      cart: {
+        ...state.cart,
+        items: itemExist
+          ? state.cart.items.map((item) => {
+              if (item.id === itemToAdd.id) {
+                return { ...item, quantity: item.quantity + 1 };
+              }
+              return item;
+            })
+          : [...state.cart.items, {
+            ...itemToAdd,
+            quantity: 1
+          }],
+      },
+    };
+  }
+  return state;
+};
+
+export const useStateDispatch = () => {
+  const dispatch = useContext(AppDispatchContext);
+
+  if (!dispatch) {
+    throw new Error(
+      "useStateDispatch was called iutside of the AppDispatchContext provider"
+    );
   }
 
-  return setState
+  return dispatch;
 };
 
 const AppStateProvider: React.FC = ({ children }) => {
-  const [state, setState] = useState(defaultState);
+  const [state, dispatch] = useReducer(reducer, defaultState);
 
   return (
     <AppStateContext.Provider value={state}>
-      <AppSetStateContext.Provider value={setState}>
+      <AppDispatchContext.Provider value={dispatch}>
         {children}
-      </AppSetStateContext.Provider>
+      </AppDispatchContext.Provider>
     </AppStateContext.Provider>
   );
 };
