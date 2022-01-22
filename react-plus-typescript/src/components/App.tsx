@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 
 import Pizza from "./Pizza";
 import Cart from "./Cart";
@@ -14,6 +14,15 @@ import AppCSS from "./App.module.css";
 
 const App = () => {
   const specialOfferPizza = pizzas.find((pizza) => pizza.specialOffer);
+
+  // useEffect(() => { // componentDidMount
+  //   const listener = () => alert('Hello')
+  //   document.addEventListener('mousedown', listener)
+
+  //   return () => { // componentWillUnmount
+  //     document.removeEventListener('mousedown', listener)
+  //   }
+  // }, [])
 
   return (
     <AppStateProvider>

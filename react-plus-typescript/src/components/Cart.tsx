@@ -1,4 +1,4 @@
-import React from "react";
+import React, { createRef } from "react";
 import { FiShoppingCart } from "react-icons/fi";
 
 import { AppStateContext } from "./AppState";
@@ -12,11 +12,15 @@ interface State {
 }
 
 class Cart extends React.Component<Props, State> {
+  #containerRef: React.RefObject<HTMLDivElement>;
+
   constructor(props: Props) {
     super(props);
     this.state = {
       isOpen: false,
     };
+
+    this.#containerRef = createRef();
     // this.handleClick = this.handleClick.bind(this);
   }
 
@@ -32,13 +36,32 @@ class Cart extends React.Component<Props, State> {
     this.setState((prevState) => ({ isOpen: !prevState.isOpen }));
   };
 
+  handleOutsideClick = (e: MouseEvent) => {
+    if (
+      this.#containerRef.current &&
+      !this.#containerRef.current.contains(e.target as Node)
+    ) {
+      this.setState({ isOpen: false });
+    }
+  }
+
+  componentDidMount() {
+    document.addEventListener("mousedown", this.handleOutsideClick);
+  }
+
+  componentWillUnmount() {
+    document.removeEventListener('mousedown', this.handleOutsideClick)
+  }
+
   render() {
     return (
       <AppStateContext.Consumer>
         {(state) => {
-          const itemsCount = state.cart.items.reduce((sum, item) => { return sum + item.quantity}, 0)
+          const itemsCount = state.cart.items.reduce((sum, item) => {
+            return sum + item.quantity;
+          }, 0);
           return (
-            <div className={CartCSS.cartContainer}>
+            <div className={CartCSS.cartContainer} ref={this.#containerRef}>
               <button
                 className={CartCSS.button}
                 type="button"
@@ -54,9 +77,11 @@ class Cart extends React.Component<Props, State> {
                 }}
               >
                 <ul>
-                  {
-                    state.cart.items.map((item) =>  <li key={item.id}>{item.name} &times; {item.quantity}</li>)
-                  }
+                  {state.cart.items.map((item) => (
+                    <li key={item.id}>
+                      {item.name} &times; {item.quantity}
+                    </li>
+                  ))}
                 </ul>
               </div>
             </div>
