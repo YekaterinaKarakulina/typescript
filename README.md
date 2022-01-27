@@ -9,9 +9,15 @@ How to run project:
 - execute js file using node `node dist/hello-world.js`
 
 ### Simple Typescript
-Basic Hello world in TS
 
 How to run project:
 - navigate to folder `cd simple-typescript`
 - execute `npm run build` to compile ts files to js, than manually execute js files `node dist/...`
 - execute `npm run dev` for compile and run program in watch mode
+
+### React + Typescript
+
+How to run project:
+- navigate to folder `cd react-plus-typescript`
+- execute `npm i` to install dependencies
+- execute `npm run start` for running web server
