@@ -5,6 +5,7 @@ import cx from 'classnames';
 import { addZero } from '../../lib/utils'
 
 import { start, stop, selectDateStart } from '../../redux/recorder';
+import { createUserEvent } from '../../redux/user-events';
 
 const Recorder = () => {
   const dispatch = useDispatch();
@@ -16,6 +17,7 @@ const Recorder = () => {
   const handleClick = () => {
     if (started) {
       window.clearInterval(interval.current);
+      dispatch(createUserEvent())
       dispatch(stop());
     } else {
       dispatch(start());
