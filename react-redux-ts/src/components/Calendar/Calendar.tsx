@@ -7,6 +7,8 @@ import {
   loadUserEvents,
   UserEvent,
 } from '../../redux/user-events';
+
+import EventItem from './EventItem'
 import './Calendar.css';
 
 const mapState = (state: RootState) => ({
@@ -87,19 +89,9 @@ const Calendar: React.FC<Props> = ({ events, loadUserEvents }) => {
               </span>
             </div>
             <div className="calendar-events">
-              {events.map((event) => {
-                return (
-                  <div key={event.id} className="calendar-event">
-                    <div className="calendar-event-info">
-                      <div className="calendar-event-time">10:00 - 12:00</div>
-                      <div className="calendar-event-title">{event.title}</div>
-                    </div>
-                    <button className="calendar-event-delete-button">
-                      &times;
-                    </button>
-                  </div>
-                );
-              })}
+              {events.map((event) => (
+                <EventItem key={event.id} event={event} />
+              ))}
             </div>
           </div>
         );
