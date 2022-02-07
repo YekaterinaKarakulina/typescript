@@ -28,3 +28,16 @@ How to run project:
 - navigate to folder `cd react-redux-ts`
 - execute `npm i` to install dependencies
 - execute `npm run dev` for development
+
+### Next JS app task-mate
+
+Navigate to project folder `cd task-mate`
+    
+## npm run dev
+    Starts the development server.
+
+ ## npm run build
+    Builds the app for production.
+
+ ## npm start
+    Runs the built app in production mode.
