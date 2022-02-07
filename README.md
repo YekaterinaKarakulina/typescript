@@ -41,3 +41,10 @@ Navigate to project folder `cd task-mate`
 
  ## npm start
     Runs the built app in production mode.
+
+- To start Docker container in the backgroud ` docker-compose up -d`
+- To stop Docker container ` docker-compose stop` (it save data, so after restart data will be there)
+- To remove Docker container ` docker-compose down` (data will be removed too)
+
+To get info about running Docker containers `docker-compose ps`
+To import schema to Docker container `docker exec -i task-mate-mysql-1 sh -c 'mysql -uroot -p"$MYSQL_ROOT_PASSWORD" $MYSQL_DATABASE' < db/schema.sql`
