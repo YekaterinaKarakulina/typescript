@@ -21,3 +21,10 @@ How to run project:
 - navigate to folder `cd react-plus-typescript`
 - execute `npm i` to install dependencies
 - execute `npm run start` for running web server
+
+### React + Redux + TS
+
+How to run project:
+- navigate to folder `cd react-redux-ts`
+- execute `npm i` to install dependencies
+- execute `npm run dev` for development
