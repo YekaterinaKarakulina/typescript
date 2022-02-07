@@ -47,6 +47,8 @@ interface TaskDbRow {
   task_status: TaskStatus;
 }
 
+type TasksDbQueryResult = TaskDbRow[];
+
 type TaskDbQueryResult = TaskDbRow[];
 
 const resolvers: Resolvers<ApolloContext> = {
@@ -59,7 +61,7 @@ const resolvers: Resolvers<ApolloContext> = {
         query += " WHERE task_status = ?";
         queryParams.push(status);
       }
-      const tasks = await context.db.query<TaskDbQueryResult>(
+      const tasks = await context.db.query<TasksDbQueryResult>(
         query,
         queryParams
       );
@@ -70,8 +72,18 @@ const resolvers: Resolvers<ApolloContext> = {
         status: task_status,
       }));
     },
-    task(parent, args, context) {
-      return null;
+    async task(parent, args, context) {
+      const tasks = await context.db.query<TaskDbQueryResult>(
+        "SELECT id, title, task_status FROM tasks WHERE id = ?",
+        [args.id]
+      );
+      return tasks.length
+        ? {
+            id: tasks[0].id,
+            title: tasks[0].title,
+            status: tasks[0].task_status,
+          }
+        : null;
     },
   },
   Mutation: {
