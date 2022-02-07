@@ -1,5 +1,6 @@
 import { ApolloServer, gql, IResolvers } from "apollo-server-micro";
 import mysql from "serverless-mysql";
+import { OkPacket } from "mysql";
 
 const typeDefs = gql`
   enum TaskStatus {
@@ -69,7 +70,7 @@ const resolvers: IResolvers<any, ApolloContext> = {
       let query = "SELECT id, title, task_status FROM tasks";
       const queryParams: string[] = [];
       if (status) {
-        query + " WHERE task_status = ?";
+        query += " WHERE task_status = ?";
         queryParams.push(status);
       }
       const tasks = await context.db.query<TaskDbQueryResult>(
@@ -88,8 +89,20 @@ const resolvers: IResolvers<any, ApolloContext> = {
     },
   },
   Mutation: {
-    createTask(parent, args, context) {
-      return null;
+    async createTask(
+      parent,
+      args: { input: { title: string } },
+      context
+    ): Promise<Task> {
+      const result = await context.db.query<OkPacket>(
+        "INSERT INTO tasks (title, task_status) VALUES(?, ?)",
+        [args.input.title, TaskStatus.active]
+      );
+      return {
+        id: result.insertId,
+        title: args.input.title,
+        status: TaskStatus.active,
+      };
     },
     updateTask(parent, args, context) {
       return null;
