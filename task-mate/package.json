@@ -9,6 +9,7 @@
     "codegen": "graphql-codegen --config codegen.yml"
   },
   "dependencies": {
+    "apollo-server-errors": "^3.3.1",
     "apollo-server-micro": "^2.17.0",
     "docker-compose": "^0.23.17",
     "graphql": "^15.8.0",

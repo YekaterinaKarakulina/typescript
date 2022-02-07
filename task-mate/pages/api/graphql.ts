@@ -2,6 +2,7 @@ import { ApolloServer, gql } from "apollo-server-micro";
 import mysql from "serverless-mysql";
 import { OkPacket } from "mysql";
 import { Resolvers, TaskStatus } from "../../generated/graphql-backed";
+import { UserInputError } from "apollo-server-errors";
 
 const typeDefs = gql`
   enum TaskStatus {
@@ -126,8 +127,15 @@ const resolvers: Resolvers<ApolloContext> = {
       const updatedTask = await getTaskById(args.input.id, context.db);
       return updatedTask;
     },
-    deleteTask(parent, args, context) {
-      return null;
+    async deleteTask(parent, args, context) {
+      const task = await getTaskById(args.id, context.db);
+      if (!task) {
+        throw new UserInputError('Could not delete task');
+      }
+
+      await context.db.query("DELETE FROM tasks WHERE id = ?", [args.id]);
+
+      return task;
     },
   },
 };
