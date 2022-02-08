@@ -1,25 +1,12 @@
 import { gql, useQuery } from "@apollo/client";
 import Head from "next/head";
 import Image from "next/image";
+import { TasksDocument, TasksQuery, useTasksQuery } from "../generated/graphql-frontend";
 import { initializeApollo } from "../lib/client";
 import styles from "../styles/Home.module.css";
 
-const TaskQueryDocument = gql`
-  query Tasks {
-    tasks {
-      id
-      title
-      status
-    }
-  }
-`;
-
-interface TaskQuery {
-  tasks: { id: number; title: string; status: string }[];
-}
-
 export default function Home() {
-  const result = useQuery<TaskQuery>(TaskQueryDocument);
+  const result = useTasksQuery()
   const tasks = result.data?.tasks;
 
   return (
@@ -44,8 +31,8 @@ export default function Home() {
 export const getStaticProps = async () => {
   const apolloClient = initializeApollo();
 
-  await apolloClient.query<TaskQuery>({
-    query: TaskQueryDocument,
+  await apolloClient.query<TasksQuery>({
+    query: TasksDocument,
   });
 
   return {

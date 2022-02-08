@@ -1,7 +1,7 @@
 import { ServerlessMysql } from "serverless-mysql";
 import { OkPacket } from "mysql";
 import { UserInputError } from "apollo-server-errors";
-import { Resolvers, TaskStatus } from "../generated/graphql-backed";
+import { Resolvers, TaskStatus } from "../generated/graphql-backend";
 
 interface ApolloContext {
   db: ServerlessMysql;
