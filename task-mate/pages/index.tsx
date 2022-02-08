@@ -1,29 +1,31 @@
-import { gql, useQuery } from "@apollo/client";
 import Head from "next/head";
-import Image from "next/image";
-import { TasksDocument, TasksQuery, useTasksQuery } from "../generated/graphql-frontend";
+import TaskList from "../components/TaskList";
+import {
+  TasksDocument,
+  TasksQuery,
+  useTasksQuery,
+} from "../generated/graphql-frontend";
 import { initializeApollo } from "../lib/client";
-import styles from "../styles/Home.module.css";
 
 export default function Home() {
-  const result = useTasksQuery()
+  const result = useTasksQuery();
   const tasks = result.data?.tasks;
 
   return (
-    <div className={styles.container}>
+    <div>
       <Head>
         <title>Tasks</title>
         <link rel="icon" href="/favicon.ico" />
       </Head>
-      {tasks &&
-        tasks.length > 0 &&
-        tasks.map((task) => {
-          return (
-            <div key={task.id}>
-              {task.title} ({task.status})
-            </div>
-          );
-        })}
+      {result.loading ? (
+        <p>Loading ...</p>
+      ) : result.error ? (
+        <p>An error occured</p>
+      ) : tasks && tasks.length > 0 ? (
+        <TaskList tasks={tasks} />
+      ) : (
+        <p className="no-tasks-message">You've got no tasks</p>
+      )}
     </div>
   );
 }
