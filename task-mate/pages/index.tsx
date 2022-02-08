@@ -1,4 +1,5 @@
 import Head from "next/head";
+import CreateTaskForm from "../components/CreateTaskForm";
 import TaskList from "../components/TaskList";
 import {
   TasksDocument,
@@ -17,6 +18,7 @@ export default function Home() {
         <title>Tasks</title>
         <link rel="icon" href="/favicon.ico" />
       </Head>
+      <CreateTaskForm />
       {result.loading ? (
         <p>Loading ...</p>
       ) : result.error ? (
