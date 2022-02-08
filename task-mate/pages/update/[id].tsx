@@ -1,5 +1,4 @@
 import { GetServerSideProps } from "next";
-import Error from "next/error";
 import { useRouter } from "next/router";
 import React from "react";
 import UpdateTaskForm from "../../components/UpdateTaskForm";
@@ -10,6 +9,7 @@ import {
   useTaskQuery,
 } from "../../generated/graphql-frontend";
 import { initializeApollo } from "../../lib/client";
+import Custom404 from "../404";
 
 const UpdateTask: React.FC = () => {
   const router = useRouter();
@@ -18,7 +18,7 @@ const UpdateTask: React.FC = () => {
     typeof router.query?.id === "string" ? parseInt(router.query?.id, 10) : NaN;
 
   if (!id) {
-    return <Error statusCode={404} />;
+    return <Custom404 />;
   }
 
   const { data, loading, error } = useTaskQuery({ variables: { id } });
