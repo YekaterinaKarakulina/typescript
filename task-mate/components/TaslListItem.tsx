@@ -1,6 +1,11 @@
 import React, { useEffect } from "react";
 import Link from "next/link";
-import { Task, useDeleteTaskMutation } from "../generated/graphql-frontend";
+import {
+  Task,
+  TaskStatus,
+  useDeleteTaskMutation,
+  useUpdateTaskMutation,
+} from "../generated/graphql-frontend";
 import { Reference } from "@apollo/client";
 
 interface Props {
@@ -37,14 +42,33 @@ const TaskListItem: React.FC<Props> = ({ task }) => {
     }
   };
 
+  const [updateTask, { loading: updateTaskLoading, error: updateTaskError }] =
+    useUpdateTaskMutation({ errorPolicy: "all" });
+
+  const handleStatusChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const newStatus = e.target.checked
+      ? TaskStatus.Completed
+      : TaskStatus.Active;
+    updateTask({ variables: { input: { id: task.id, status: newStatus } } });
+  };
+
   useEffect(() => {
-    if (error) {
+    if (error || updateTaskError) {
       alert("An error occured, please try again");
     }
-  }, [error]);
+  }, [error, updateTaskError]);
 
   return (
     <li className="task-list-item">
+      <label className="checkbox">
+        <input
+          type="checkbox"
+          onChange={handleStatusChange}
+          checked={task.status === TaskStatus.Completed}
+          disabled={updateTaskLoading}
+        />
+        <span className="checkbox-mark">&#10003;</span>
+      </label>
       <Link href="/update/[id]" as={`/update/${task.id}`}>
         <a className="task-list-item-title">{task.title}</a>
       </Link>
